@@ -14,6 +14,7 @@ CREATE TABLE Users (
     updatedAt DATETIME
 );
 
+
 -- Tabla Categories
 CREATE TABLE Categories (
     id INT AUTO_INCREMENT PRIMARY KEY,

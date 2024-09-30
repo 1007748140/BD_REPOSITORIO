@@ -1,86 +1,79 @@
-use ecommerce_db;
+USE ecommerce_db;
 
+-- Query to select all users where the name is between 'A' and 'M'
 SELECT *
-FROM Usuarios
-WHERE nombre BETWEEN 'A' AND 'M';
+FROM Users
+WHERE name BETWEEN 'A' AND 'M';
 
-
+-- Query to select all users where the name contains the letter 'e'
 SELECT *
-FROM Usuarios
-WHERE nombre LIKE '%e%';
+FROM Users
+WHERE name LIKE '%e%';
 
+-- Query to select all users where the name ends with the letter 'z'
 SELECT *
-FROM Usuarios
-WHERE nombre LIKE '%z';
+FROM Users
+WHERE name LIKE '%z';
 
-
+-- Query to select all products where the name starts with the letter 'T'
 SELECT *
-FROM Productos
-WHERE nombre LIKE 'T%';
+FROM Products
+WHERE name LIKE 'T%';
 
-
+-- Query to select all suppliers where the name contains the letter 'o'
 SELECT *
-FROM Proveedores
-WHERE nombre LIKE '%o%';
+FROM Suppliers
+WHERE name LIKE '%o%';
 
-
+-- Query to select all users where the name is 'Carlos García'
 SELECT *
-FROM Usuarios
-WHERE nombre = 'Carlos García';
+FROM Users
+WHERE name = 'Carlos García';
 
-
+-- Query to select all products where the name is 'Television'
 SELECT *
-FROM Productos
-WHERE nombre = 'Televisor';
+FROM Products
+WHERE name = 'Television';
 
-
+-- Query to select all users where the name is between 'A' and 'M'
 SELECT *
-FROM Usuarios
-WHERE nombre BETWEEN 'A' AND 'M';
+FROM Users
+WHERE name BETWEEN 'A' AND 'M';
 
-
+-- Query to select all users where the name starts with 'J' and contains 'a'
 SELECT *
-FROM Usuarios
-WHERE nombre LIKE 'J%' AND nombre LIKE '%a%';
+FROM Users
+WHERE name LIKE 'J%' AND name LIKE '%a%';
 
-#Consulta: Ver las órdenes pendientes de ser enviadas
-SELECT Ordenes.id, Usuarios.nombre, Ordenes.total, Envios.estado_envio
-FROM Ordenes
-JOIN Usuarios ON Ordenes.usuario_id = Usuarios.id
-JOIN Envios ON Ordenes.id = Envios.orden_id
-WHERE Envios.estado_envio = 'Pendiente';
+-- Query to view all pending orders to be shipped
+SELECT Orders.id, Users.name, Orders.total, Shipments.shipping_status
+FROM Orders
+INNER JOIN Users ON Orders.user_id = Users.id
+INNER JOIN Shipments ON Orders.id = Shipments.order_id
+WHERE Shipments.shipping_status = 'Pending';
 
-#Consultar detalles de los productos y proveedores para una orden específica
-SELECT Ordenes.id, Productos.nombre, Proveedores.nombre, Detalles_Ordenes.cantidad, Detalles_Ordenes.precio_unitario
-FROM Detalles_Ordenes
-JOIN Ordenes ON Detalles_Ordenes.orden_id = Ordenes.id
-JOIN Productos ON Detalles_Ordenes.producto_id = Productos.id
-JOIN Proveedores ON Productos.proveedor_id = Proveedores.id
-WHERE Ordenes.id = 1;
+-- Query to get product and supplier details for a specific order
+SELECT Orders.id, Products.name, Suppliers.name, Order_Details.quantity, Order_Details.unit_price
+FROM Order_Details
+INNER JOIN Orders ON Order_Details.order_id = Orders.id
+INNER JOIN Products ON Order_Details.product_id = Products.id
+INNER JOIN Suppliers ON Products.supplier_id = Suppliers.id
+WHERE Orders.id = 1;
 
+-- Query to list all payment methods used in orders
+SELECT Orders.id, Payment_Methods.name, Payments.amount, Payments.payment_status
+FROM Payments
+INNER JOIN Orders ON Payments.order_id = Orders.id
+INNER JOIN Payment_Methods ON Payments.payment_method_id = Payment_Methods.id;
 
-#Listar todos los métodos de pago utilizados en las órdenes
-SELECT Ordenes.id, Metodos_Pago.nombre, Pagos.monto, Pagos.estado_pago
-FROM Pagos
-JOIN Ordenes ON Pagos.orden_id = Ordenes.id
-JOIN Metodos_Pago ON Pagos.metodo_pago_id = Metodos_Pago.id;
+-- Query to get the total number of products sold (quantity) by each category
+SELECT Categories.name, SUM(Order_Details.quantity)
+FROM Order_Details
+INNER JOIN Products ON Order_Details.product_id = Products.id
+INNER JOIN Categories ON Products.category_id = Categories.id
+GROUP BY Categories.name;
 
-
-#Obtener el total de productos vendidos (cantidad) por cada categoría
-SELECT Categorias.nombre, SUM(Detalles_Ordenes.cantidad)
-FROM Detalles_Ordenes
-JOIN Productos ON Detalles_Ordenes.producto_id = Productos.id
-JOIN Categorias ON Productos.categoria_id = Categorias.id
-GROUP BY Categorias.nombre;
-
-
-#Obtener información de todas las órdenes junto con el nombre del usuario que las realizó
-SELECT Ordenes.id, Usuarios.nombre, Ordenes.total, Ordenes.estado
-FROM Ordenes
-JOIN Usuarios ON Ordenes.usuario_id = Usuarios.id;
-
-
-
-
-
-
+-- Query to get information for all orders along with the name of the user who placed the order
+SELECT Orders.id, Users.name, Orders.total, Orders.status
+FROM Orders
+INNER JOIN Users ON Orders.user_id = Users.id;
