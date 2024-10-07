@@ -3,12 +3,13 @@ CREATE DATABASE ecommerce_db;
 USE ecommerce_db;
 
 -- Tabla Users
+-- crear una tabla peoples
 CREATE TABLE Users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL,
+    `name` VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL,
     `password` VARCHAR(255) NOT NULL,
-    phone VARCHAR(20),
+    phone VARCHAR(10),
     address TEXT,
     createdAt DATETIME,
     updatedAt DATETIME
@@ -16,7 +17,7 @@ CREATE TABLE Users (
 
 
 -- Tabla Categories
-CREATE TABLE Categories (
+CREATE TABLE CategoriesProducts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
     `description` TEXT,
@@ -24,16 +25,8 @@ CREATE TABLE Categories (
     updatedAt DATETIME
 );
 
--- Tabla Suppliers
-CREATE TABLE Suppliers (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL,
-    address TEXT,
-    phone VARCHAR(20),
-    email VARCHAR(255),
-    createdAt DATETIME,
-    updatedAt DATETIME
-);
+-- Tabla Suppliers ya iria en roles relacionada con peoples
+
 
 -- Tabla Discounts con campos y llaves foráneas relacionadas
 CREATE TABLE Discounts (
@@ -42,8 +35,8 @@ CREATE TABLE Discounts (
     discount_percentage DECIMAL(5, 2) NOT NULL,
     start_date DATETIME,
     end_date DATETIME,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    createdAt DATETIME ,
+    updatedAt DATETIME
 );
 
 -- Tabla Products con relaciones a Categories y Suppliers
@@ -62,6 +55,7 @@ CREATE TABLE Products (
     FOREIGN KEY (supplier_id) REFERENCES Suppliers(id),
     FOREIGN KEY (discount_id) REFERENCES Discounts(id) -- Relación con Discounts
 );
+# actualizar todo
 
 -- Tabla Orders con relaciones a Users
 CREATE TABLE Orders (
@@ -71,8 +65,8 @@ CREATE TABLE Orders (
     `status` ENUM('Pending', 'Shipped', 'Delivered', 'Cancelled') NOT NULL,
     total DECIMAL(10, 2) NOT NULL,
     shipping_address TEXT NOT NULL,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    createdAt DATETIME,
+    updatedAt DATETIME,
     FOREIGN KEY (user_id) REFERENCES Users(id),
     FOREIGN KEY (discount_id) REFERENCES Discounts(id) -- Relación con Discounts
 );
@@ -106,8 +100,8 @@ CREATE TABLE Payments (
     payment_method_id INT,
     amount DECIMAL(10, 2) NOT NULL,
     payment_status ENUM('Pending', 'Completed', 'Failed') NOT NULL,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    createdAt DATETIME,
+    updatedAt DATETIME,
     FOREIGN KEY (order_id) REFERENCES Orders(id),
     FOREIGN KEY (payment_method_id) REFERENCES Payment_Methods(id)
 );
@@ -120,8 +114,8 @@ CREATE TABLE Shipments (
     shipping_status ENUM('Pending', 'Shipped', 'Delivered') NOT NULL,
     shipping_date DATETIME,
     delivery_date DATETIME,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    createdAt DATETIME,
+    updatedAt DATETIME,
     FOREIGN KEY (order_id) REFERENCES Orders(id)
 );
 
@@ -129,8 +123,8 @@ CREATE TABLE Shipments (
 CREATE TABLE Shopping_Carts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    createdAt DATETIME,
+    updatedAt DATETIME,
     FOREIGN KEY (user_id) REFERENCES Users(id)
 );
 
@@ -140,8 +134,8 @@ CREATE TABLE Cart_Details (
     cart_id INT,
     product_id INT,
     quantity INT NOT NULL,
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    createdAt DATETIME,
+    updatedAt DATETIME,
     FOREIGN KEY (cart_id) REFERENCES Shopping_Carts(id),
     FOREIGN KEY (product_id) REFERENCES Products(id)
 );
@@ -153,8 +147,8 @@ CREATE TABLE Product_Reviews (
     product_id INT,
     `comment` TEXT,
     rating INT CHECK (rating >= 1 AND rating <= 5),
-    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    createdAt DATETIME,
+    updatedAt DATETIME,
     FOREIGN KEY (user_id) REFERENCES Users(id),
     FOREIGN KEY (product_id) REFERENCES Products(id)
 );
