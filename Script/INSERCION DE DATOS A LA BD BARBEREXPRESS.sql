@@ -1,12 +1,12 @@
 use BarberExpress;
 
 -- Insertar en la tabla people
-INSERT INTO people (id, first_name, last_name) VALUES
-(1, 'Juan', 'Pérez'),
-(2, 'Carlos', 'Rodríguez'),
-(3, 'Ana', 'Gómez'),
-(4, 'María', 'López'),
-(5, 'Luis', 'Martínez');
+INSERT INTO people ( first_name, last_name) VALUES
+( 'Juan', 'Pérez'),
+( 'Carlos', 'Rodríguez'),
+('Ana', 'Gómez'),
+('María', 'López'),
+('Luis', 'Martínez');
 
 -- Insertar en la tabla state
 INSERT INTO `state` (name, country_id) VALUES
